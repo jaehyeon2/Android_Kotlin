@@ -3,13 +3,25 @@ package com.example.chapter3
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.CompoundButton
+import android.widget.SeekBar
 import androidx.core.widget.addTextChangedListener
 import com.example.chapter3.databinding.ActivityMainBinding
+import com.example.chapter3.databinding.ProgressbarBinding
+import com.example.chapter3.databinding.RatingbarBinding
+import com.example.chapter3.databinding.SeekbarBinding
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
     val binding by lazy {ActivityMainBinding.inflate(layoutInflater)}
+
+    val bindingprogress by lazy {ProgressbarBinding.inflate(layoutInflater)}
+
+    val bindingseekbar by lazy {SeekbarBinding.inflate(layoutInflater)}
+
+    val bindingratingbar by lazy {RatingbarBinding.inflate(layoutInflater)}
 
     val listener by lazy{
         CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
@@ -32,8 +44,36 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+//        setContentView(binding.root)
+//        setContentView(bindingprogress.root)
 
+//        setContentView(bindingseekbar.root)
+//        bindingseekbar.seekBar.setOnSeekBarChangeListener(object:SeekBar.OnSeekBarChangeListener{
+//            override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
+//                bindingseekbar.textView.text="$progress"
+//                //TODO("Not yet implemented")
+//            }
+//
+//            override fun onStartTrackingTouch(p0: SeekBar?) {
+//                //TODO("Not yet implemented")
+//            }
+//
+//            override fun onStopTrackingTouch(p0: SeekBar?) {
+//                //TODO("Not yet implemented")
+//            }
+//        })
+
+        setContentView(bindingratingbar.root)
+        bindingratingbar.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            bindingratingbar.textView.text="$rating"
+        }
+
+        thread(start=true){
+            Thread.sleep(3000)
+            runOnUiThread{
+                showProgress(false)
+            }
+        }
 //        val binding = ActivityMainBinding.inflate(layoutInflater)
 
 
@@ -60,5 +100,15 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    }
+
+    fun showProgress(show:Boolean){
+        if(show){
+            bindingprogress.progressLayout.visibility= View.VISIBLE
+        }
+        else{
+            bindingprogress.progressLayout.visibility=View.GONE
+        }
+        //bindingprogress.progressLayout.visibility = if(show) View.VISIBLE else View.GONE
     }
 }
